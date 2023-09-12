@@ -1,0 +1,48 @@
+﻿@page "/log"
+
+    <label for="logger" class="col-sm-2 col-form-label">LogType</label>
+    <div class="col-sm-10">
+        <select class="form-select" @onchange="UpdateFilteredData" value="@logType">
+            @foreach (var Type in Enum.GetValues(typeof(SharedLibrary.LogType)))
+            {
+                <option value="@Type">@Type</option>
+            }
+        </select>
+        <div>
+            <input type="date" @bind="selectedStartDate" />
+            <input type="date" @bind="selectedEndDate" />
+            <button @onclick="FilterData">Filter</button>
+        </div>
+    </div>
+
+<h3>Logger</h3>
+
+<div class="form-group row">
+    @if (data.Any())
+    {
+        @foreach (var obj in data)
+        {
+            <p>@obj.LogType</p>
+            <p>@obj.CreatedAt</p>
+            <p>@obj.Message</p>
+        }
+    }
+    else if (loadingLogs)
+    {
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p class="col-md-12 text-center">No logs available.</p>
+    }
+
+</div>
+<div class="footer">
+    <button class="arrow-button" @onclick="PreviousPage"><span>&lt;</span> Previous</button>
+    <span>Page: @CurrentPage</span>
+    <button class="arrow-button" @onclick="NextPage">Next <span>&gt;</span></button>
+</div>
